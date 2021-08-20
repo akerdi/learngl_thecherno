@@ -14,8 +14,11 @@ aux_source_directory(. DIR_SRCS)
 add_executable(Learngl ${DIR_SRCS})
 
 # 导入glew lib
-link_directories("/usr/local/Cellar/glew/2.2.0_1/lib")
-target_link_libraries(Learngl glew)
+find_package(GLEW REQUIRED)
+target_link_libraries(Learngl GLEW::GLEW)
+
+# link_directories("/usr/local/Cellar/glew/2.2.0_1/lib")
+# target_link_libraries(Learngl GLEW)
 
 # 导入glfw lib
 link_directories("/usr/local/Cellar/glfw/3.3.4/lib")
