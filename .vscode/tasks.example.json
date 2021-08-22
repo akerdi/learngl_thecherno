@@ -1,0 +1,28 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+      {
+          "label": "build",
+          "type": "shell",
+          "command": "clang++",
+          "args": [
+              "main.cc",
+              "-ohello.out",
+              "-I/usr/local/Cellar/glfw/3.3.4/include",
+              "-I/usr/local/Cellar/glew/2.2.0_1/include",
+              "-L/usr/local/Cellar/glew/2.2.0_1/lib",
+              "-L/usr/local/Cellar/glfw/3.3.4/lib",
+              "-lGLEW",
+              "-lglfw",
+              "-framework",
+              "Cocoa",
+              "-framework",
+              "OpenGL",
+              "-framework",
+              "IOKit",
+              "-framework",
+              "CoreVideo"
+          ]
+      }
+  ]
+}

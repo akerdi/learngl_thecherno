@@ -1,7 +1,0 @@
-{
-  "files.associations": {
-    "*.iced": "coffeescript",
-    "*.conf": "json",
-    "iostream": "cpp"
-  }
-}

@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "name": "(lldb) 启动",
+          "type": "cppdbg",
+          "request": "launch",
+          "program": "${workspaceFolder}/hello.out", //可执行文件的名字
+          "args": [],
+          "stopAtEntry": false,
+          "cwd": "${fileDirname}",
+          "environment": [],
+          "externalConsole": false,
+          "MIMode": "lldb",
+          "preLaunchTask": "build" //启动前执行的任务
+      }
+  ]
+}
