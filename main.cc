@@ -117,6 +117,8 @@ int main(void) {
   cout << "oepngl shader version: " << major << "." << minor << endl;
   glfwMakeContextCurrent(window);
 
+  glfwSwapInterval(500);
+
   if (glewInit() != GLEW_OK) {
     cout << "Error ! " << endl;
   }
@@ -134,11 +136,13 @@ int main(void) {
     2, 3, 0
   };
 
-  unsigned int VBO, VAO;
-  glGenBuffers(1, &VBO);
-  glGenVertexArrays(1, &VAO);
-  glBindVertexArray(VAO);
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  unsigned int vao;
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
+
+  unsigned int buffer;
+  GLCall(glGenBuffers(1, &buffer));
+  glBindBuffer(GL_ARRAY_BUFFER, buffer);
   glBufferData(GL_ARRAY_BUFFER, 4*2*sizeof(float), positions, GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(0);
@@ -155,15 +159,48 @@ int main(void) {
   unsigned int shader = CreateShader(vertexShader, fragmentShader);
   glUseProgram(shader);
 
+  int location = glGetUniformLocation(shader, "u_Color");
+  ASSERT(location != -1);
+
+  glBindVertexArray(0);
+  glUseProgram(0);
+  GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+  float r = 0.f, g = 0.f, b = 0.f;
+  float incrementr = 0.f, incrementg = 0.f, incrementb = 0.f;
   while (!glfwWindowShouldClose(window)) {
     glClear(GL_COLOR_BUFFER_BIT);
+
+    GLCall(glUseProgram(shader))
+    GLCall(glUniform4f(location, r, g, b, 1.0f))
+    GLCall(glBindVertexArray(vao))
+    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo))
+
     GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr))
+
+    if (r >= 1.0f)
+      incrementr = -0.02f;
+    else if (r <= 0.f)
+      incrementr = 0.02f;
+    if (g >= 1.f)
+      incrementg = -0.01f;
+    else if (g <= 0.f)
+      incrementg = 0.01f;
+    if (b >= 1.f)
+      incrementb = -0.05;
+    else if (b <= 0.0f)
+      incrementb = 0.05;
+    r += incrementr;
+    g += incrementg;
+    b += incrementb;
+
     glfwSwapBuffers(window);
 
     glfwPollEvents();
   }
-  glDeleteVertexArrays(1, &VAO);
-  glDeleteBuffers(1, &VBO);
+  glDeleteVertexArrays(1, &vao);
+  glDeleteBuffers(1, &buffer);
   glDeleteProgram(shader);
   glfwTerminate();
   return 0;
